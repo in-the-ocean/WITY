@@ -5,6 +5,9 @@
  * @property {string} publishedAt - The published date of the playlist item.
  */
 
+/**
+ * AiSummary class for generating summaries of YouTube Channels.
+ */
 class AiSummary {
   constructor(config) {
     this.config = config;

@@ -6,16 +6,18 @@
     "content_scripts": [
     {
         "js": [
+            "config/index.js",
+
+            "scripts/api.ts",
             "scripts/wity.ts",
             "scripts/ui.js",
             "scripts/globals.js",
             "scripts/wordcloud2.js",
-
-            "scripts/api.ts",
             "scripts/summary/index.js",
-            "libs/openai/completion.js",
-            "config/index.js",
-            "libs/cache/upstash.js"
+            
+            "libs/cache/upstash.js",
+            "libs/debounce/index.js",
+            "libs/openai/completion.js"
         ],
         "css": [
             "css/profilecard.css"
