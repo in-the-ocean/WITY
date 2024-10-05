@@ -5,7 +5,7 @@
     "description": "Descriptive pop up for a youtube channel",
     "content_scripts": [
     {
-        "js": ["scripts/wity.ts", "scripts/api.ts"],
+        "js": ["scripts/wity.ts","scripts/wordcloud2.js","scripts/api.ts"],
         "matches": [
         "https://*.youtube.com/*"
         ]
