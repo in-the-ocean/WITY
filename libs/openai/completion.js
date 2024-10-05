@@ -35,7 +35,7 @@
  * OpenAI class for interacting with the OpenAI API.
  */
 class OpenAI {
-  constructor() {
+  constructor(config) {
     if (config.LLM_API_KEY) {
       this.LLM_API_KEY = config.LLM_API_KEY;
     } else {
