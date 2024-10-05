@@ -1,11 +1,13 @@
 const getChannelNSubscriberName = (channelHandle) => {
-    return fetch(`${GOOGLE_API}/youtube/v3/channels?part=snippet,statistics&forHandle=${encodeURIComponent(channelHandle)}&key=${API_KEY}`)
+    return fetch(`${GOOGLE_API}/youtube/v3/channels?part=snippet,statistics,brandingSettings&forHandle=${encodeURIComponent(channelHandle)}&key=${API_KEY}`)
         .then(response => response.json())
         .then(data => {
             if (data.items && data.items.length > 0) {
                 const channelName = data.items[0].snippet.title;
                 const subscriberCount = data.items[0].statistics.subscriberCount;
-                return { channelName, subscriberCount };
+                const thumbnails = data.items[0].snippet.thumbnails.default.url;
+                const banner = data.items[0].brandingSettings.image.bannerExternalUrl
+                return { channelName, subscriberCount, thumbnails, banner};
             } else {
                 console.log("Channel not found");
                 return null;
