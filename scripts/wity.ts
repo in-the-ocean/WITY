@@ -63,7 +63,7 @@ const showProfileIfAvailable = (userProfileCard) =>
 
       target.addEventListener("mouseout", () => userProfileCard.remove());
     }
-  }, 300);
+  }, 30);
 
 window.addEventListener("load", () => {
   console.log("WITY onload");
