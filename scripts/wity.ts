@@ -13,6 +13,7 @@ const showProfileIfAvailable = (event) => {
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
+                console.log(channelHandle);
             });
 
         // Call the function to get the channel name and subscriber count
