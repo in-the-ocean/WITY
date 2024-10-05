@@ -10,7 +10,7 @@
             "scripts/ui.js",
             "scripts/globals.js",
             "scripts/wordcloud2.js",
-            
+            "scripts/api.ts",
             "scripts/summary/index.js",
             "libs/openai/completion.js",
             "config/index.js"
