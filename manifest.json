@@ -15,6 +15,9 @@
             "libs/openai/completion.js",
             "config/index.js"
         ],
+        "css": [
+            "css/profilecard.css"
+        ],
         "matches": [
         "https://*.youtube.com/*"
         ]
