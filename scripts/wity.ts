@@ -14,18 +14,16 @@ const showProfileIfAvailable = (userProfileCard) =>
       let channelHandle = target.href.slice(target.href.search("@"));
       console.log("usernameis", channelHandle);
 
-      // Existing fetch call (if needed)
-      fetch(
-        GOOGLE_API +
-          `/youtube/v3/channels?part=contentDetails&key=${API_KEY}&forHandle=${channelHandle}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          console.log(channelHandle);
-        });
+        // Existing fetch call (if needed)
+        // fetch(GOOGLE_API + `/youtube/v3/channels?part=contentDetails&key=${API_KEY}&forHandle=${channelHandle}`)
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         console.log(data);
+        //         console.log(channelHandle);
+        //     });
+        userProfileCard.setCursor(event.pageX, event.pageY);
 
-      // Call the function to get the channel name and subscriber count
+        // Call the function to get the channel name and subscriber count
       getChannelNSubscriberName(channelHandle).then((result) => {
         if (result) {
           console.log("Channel Name:", result.channelName);
@@ -35,6 +33,22 @@ const showProfileIfAvailable = (userProfileCard) =>
           console.log("banner:", result.banner);
         }
       });
+        getAllVideoTitlesByChannelHandle(channelHandle).then(videoTitles => {
+            if (videoTitles.length > 0) {
+                console.log(`Total Videos Found: ${videoTitles.length}`);
+                videoTitles.forEach((title, index) => {
+                    console.log(`${index + 1}. ${title}`);
+                });
+            } else {
+                console.log("No videos found for this channel.");
+            }
+        });
+        console.log("usernameis", channelHandle)
+        // fetch(GOOGLE_API + `/youtube/v3/channels?part=contentDetails&key=${API_KEY}&forHandle=${channelHandle}`)
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         console.log(data)
+        // //     })
 
       getAllVideoTitlesByChannelHandle(channelHandle).then((videoTitles) => {
         if (videoTitles.length > 0) {

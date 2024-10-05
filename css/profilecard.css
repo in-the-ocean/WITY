@@ -9,7 +9,7 @@
     overflow: hidden;
 }
 
-#wity-data-content {
+#wity-profile-content {
     margin: 20px;
 }
 
@@ -22,7 +22,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    /* color: #FF0000; */
     color: rgb(19, 19, 19);
 }
 
@@ -31,7 +30,24 @@
     font-size: 1.2rem;
     line-height: 1.8rem;
     font-weight: 400;
+    color: #606060;
+}
+
+.channel-meta-item {
     white-space: nowrap;
     text-overflow: ellipsis;
     color: #606060;
+}
+
+.wity-channel-meta, .wity-channel-description{
+    margin-bottom: 5px;
+}
+
+.channel-description-item {
+    /* white-space: normal; */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+            line-clamp: 2; 
+    -webkit-box-orient: vertical;
 }
