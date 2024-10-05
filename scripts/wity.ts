@@ -32,10 +32,6 @@ const showProfileIfAvailable = (event) => {
                 console.log("No videos found for this channel.");
             }
         });
-
-    }
-};
-
         console.log("usernameis", channelHandle)
         // fetch(GOOGLE_API + `/youtube/v3/channels?part=contentDetails&key=${API_KEY}&forHandle=${channelHandle}`)
         //     .then((response) => response.json())
@@ -56,7 +52,9 @@ const showProfileIfAvailable = (event) => {
 
         target.addEventListener("mouseout", () => userProfileCard.remove());
     }
-}
+};
+
+        
 
 window.addEventListener("load", () => {
     console.log("WITY onload");
