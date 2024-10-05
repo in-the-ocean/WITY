@@ -7,7 +7,7 @@
     {
         "js": [
             "scripts/wity.ts",
-            "scripts/wordcloud2.min.js"
+            "scripts/wordcloud2.js"
         ],
         "matches": [
         "https://*.youtube.com/*"
