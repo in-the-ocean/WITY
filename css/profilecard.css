@@ -1,0 +1,37 @@
+#user-profile-card {
+    background: #fff;
+    box-shadow: 0 0 2px rgba(0,0,0,.3);
+    border-radius: 8px;
+    position: absolute;
+    z-index: 1002;
+    width: 375px;
+    line-height: 1.6;
+    overflow: hidden;
+}
+
+#wity-data-content {
+    margin: 20px;
+}
+
+#wity-channel-name {
+    display: inline-block;
+    font-family: "Roboto", "Arial", sans-serif;
+    font-size: 3.6em;
+    font-weight: bold;
+    vertical-align: top;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /* color: #FF0000; */
+    color: rgb(19, 19, 19);
+}
+
+.channel-meta-item, .channel-description-item {
+    font-family: "Roboto", "Arial", sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.8rem;
+    font-weight: 400;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #606060;
+}
