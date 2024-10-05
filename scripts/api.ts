@@ -16,25 +16,7 @@ const getChannelNSubscriberName = (channelHandle) => {
             return null;
         });
 };
-/*
-const getTitle = (channelHandle) => {
-    return fetch(`${GOOGLE_API}/youtube/v3/playlistItems?part=snippet&forHandle=${encodeURIComponent(channelHandle)}&key=${API_KEY}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.items && data.items.length > 0) {
-                const videoTitle = data.items[0].snippet.title;
-                return { videoTitle };
-            } else {
-                console.log("List not found");
-                return null;
-            }
-        })
-        .catch(error => {
-            console.error("Error fetching list name:", error);
-            return null;
-        });
-};
-*/
+
 const getUploadsPlaylistIdByHandle = (channelHandle) => {
     return fetch(`${GOOGLE_API}/youtube/v3/channels?part=contentDetails&forHandle=${encodeURIComponent(channelHandle)}&key=${API_KEY}`)
         .then(response => response.json())
