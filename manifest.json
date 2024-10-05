@@ -5,7 +5,11 @@
     "description": "Descriptive pop up for a youtube channel",
     "content_scripts": [
     {
-        "js": ["scripts/wity.ts"],
+        "js": [
+            "scripts/wity.ts",
+            "scripts/ui.js",
+            "scripts/globals.js"
+        ],
         "matches": [
         "https://*.youtube.com/*"
         ]
