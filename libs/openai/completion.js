@@ -31,6 +31,9 @@
  * @property {Object} completion_tokens_details - The completion tokens details.
  */
 
+/**
+ * OpenAI class for interacting with the OpenAI API.
+ */
 class OpenAI {
   constructor() {
     if (config.LLM_API_KEY) {
@@ -45,6 +48,12 @@ class OpenAI {
     }
   }
 
+  /**
+    * Builds a POST request with the given body.
+
+    * @param {Object} body - The body of the request.
+    * @returns {Object} - The POST request.
+  */
   buildPostRequest(body) {
     return {
       method: "POST",
@@ -58,6 +67,7 @@ class OpenAI {
 
   /**
    * Sends a prompt to the completion API and returns the response.
+   *
    * @param {string} systemPrompt - The prompt to send to the completion API. Defines the context for the user prompt.
    * @param {string} userPrompt - The prompt to send to the completion API.
    * @param {Object} options - The options for the completion API.
@@ -73,14 +83,14 @@ class OpenAI {
     {
       model = "gpt-3.5-turbo",
       temperature = 1,
-      max_tokens = 1024,
+      max_tokens = 512,
       top_p = 1,
     } = {}
   ) {
     const request = fetch(
       this.COMPLETION_API,
       this.buildPostRequest({
-        model: model || "gpt-3.5-turbo",
+        model: model,
         messages: [
           {
             role: "system",
