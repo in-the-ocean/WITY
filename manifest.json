@@ -8,7 +8,8 @@
         "js": [
             "scripts/wity.ts",
             "scripts/ui.js",
-            "scripts/globals.js"
+            "scripts/globals.js",
+            "scripts/wordcloud2.js"
         ],
         "matches": [
         "https://*.youtube.com/*"
