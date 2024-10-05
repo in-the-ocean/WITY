@@ -21,6 +21,7 @@ const showProfileIfAvailable = (event) => {
             if (result) {
                 console.log("Channel Name:", result.channelName);
                 console.log("Subscriber Count:", result.subscriberCount);
+                console.log("description:", result.description);
                 console.log("thumbnails:", result.thumbnails);
                 console.log("banner:", result.banner);
             }

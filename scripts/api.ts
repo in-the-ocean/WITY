@@ -5,9 +5,10 @@ const getChannelNSubscriberName = (channelHandle) => {
             if (data.items && data.items.length > 0) {
                 const channelName = data.items[0].snippet.title;
                 const subscriberCount = data.items[0].statistics.subscriberCount;
+                const description = data.items[0].snippet.description;
                 const thumbnails = data.items[0].snippet.thumbnails.default.url;
                 const banner = data.items[0].brandingSettings.image.bannerExternalUrl
-                return { channelName, subscriberCount, thumbnails, banner};
+                return { channelName, subscriberCount, thumbnails, banner, description};
             } else {
                 console.log("Channel not found");
                 return null;
