@@ -4,14 +4,17 @@ const WINDOW_PADDING = 20;
 const getUserProfileCardHTML = (data) => {
     return `
         <div id="user-profile-card" style="position:absolute;">
+            <div id="wity-banner-div" style="background-image: url(&quot;${data.banner}&quot;);">
+            </div>
             <div id="wity-profile-content">
-                <h1 id="wity-channel-name">${data.channelName}</h1>
-                <div class="wity-channel-meta">
-                    <span class="channel-meta-item">${data.channelHandle} • ${data.subscriberCount|| 0} subscribers • ${data.videoCount|| 0} videos</span>
+                <div id="wity-profile-title">
+                    <img id="wity-profile-image" src="${data.thumbnails}" alt="${data.channelName}" />
+                    <h1 id="wity-channel-name">${data.channelName}</h1>
+                    <p class="channel-meta-item">${data.channelHandle} • ${data.subscriberCount|| 0} subscribers • ${data.videoCount|| 0} videos</span>
                 </div>
 
                 <div class="wity-channel-description">
-                    <span class="channel-description-item">${data.description || ""}</span>
+                    <p class="channel-description-item">${data.description || ""}</span>
                 </div>
             </div>
         </div>
