@@ -1,7 +1,6 @@
 const YOUTUBE_URL = "https://www.youtube.com";
 const GOOGLE_API = "https://www.googleapis.com";
-const API_KEY = "AIzaSyCNxM2TrpT3Usxsm55FxXI2v3SZzElafPw";
-
+const API_KEY = "AIzaSyAzvFjqNMyEA9Giukpjb3eNxO7i3h0CIMk"
 /**
  * @typedef {Object} ChannelData
  * @property {string} channelName
