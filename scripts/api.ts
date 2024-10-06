@@ -42,14 +42,16 @@ const getUploadsPlaylistIdByHandle = (channelHandle) => {
 const getAllPlaylistItems = async (playlistId) => {
     let items = [];
     let nextPageToken = '';
+    let fetchedItems = 0;
     do {
         const response = await fetch(`${GOOGLE_API}/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(playlistId)}&key=${API_KEY}&maxResults=50&pageToken=${nextPageToken}`);
         const data = await response.json();
         if (data.items && data.items.length > 0) {
+            fetchedItems += data.items.length;
             items = items.concat(data.items);
         }
         nextPageToken = data.nextPageToken || '';
-    } while (nextPageToken);
+    } while (nextPageToken && fetchedItems < 100);
     return items;
 };
 
