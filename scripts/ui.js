@@ -69,10 +69,10 @@ class UserProfileCard {
 
     updateData(data) {
         this.data = data;
+        this.el.innerHTML = getUserProfileCardHTML(this.data);
     }
 
     show() {
-        this.el.innerHTML = getUserProfileCardHTML(this.data)
         this.el.style.display = "flex";
     }
 
