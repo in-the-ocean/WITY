@@ -4,18 +4,17 @@ const WINDOW_PADDING = 20;
 const getUserProfileCardHTML = (data) => {
     return `
         <div id="user-profile-card" style="position:absolute;">
-            <div id="wity-data-content">
-                <h1 id="wity-channel-name">${data.channelName}</h1>
-                <div class="channel-meta">
-                    <span class="channel-meta-item">${data.channelHandle} • ${data.subscribers || 0} subscribers • ${data.totalUploads || 0} videos</span>
+            <div id="wity-banner-div" style="background-image: url(&quot;${data.banner}&quot;);">
+            </div>
+            <div id="wity-profile-content">
+                <div id="wity-profile-title">
+                    <img id="wity-profile-image" src="${data.thumbnails}" alt="${data.channelName}" />
+                    <h1 id="wity-channel-name">${data.channelName}</h1>
+                    <p class="channel-meta-item">${data.channelHandle} • ${data.subscriberCount|| 0} subscribers • ${data.videoCount|| 0} videos</span>
                 </div>
 
-                <div class="channel-meta">
-                    <span class="channel-meta-item">${data.uploadsIn30Days || 0} uploads in 30 days</span>
-                </div>
-
-                <div class="channel-description">
-                    <span class="channel-description-item">${data.description || ""}</span>
+                <div class="wity-channel-description">
+                    <p class="channel-description-item">${data.description || ""}</span>
                 </div>
             </div>
         </div>
@@ -28,14 +27,6 @@ class UserProfileCard {
     cursor;
     constructor() {
         this.data = {
-            channelHandle: "@DRDrayDay",
-            channelName: "DrDray",
-            subscribers: 30000,
-            totalUploads: 312,
-            description: "this is description",
-            // profileImage: string; // url
-            // profileBackground: string; // url
-            uploadsIn30Days: 7,
         };
         this.el = document.createElement("div");
         this.el.style.position = "absolute";
@@ -76,8 +67,12 @@ class UserProfileCard {
         }
     }
 
+    updateData(data) {
+        this.data = data;
+        this.el.innerHTML = getUserProfileCardHTML(this.data);
+    }
+
     show() {
-        this.el.innerHTML = getUserProfileCardHTML(this.data)
         this.el.style.display = "flex";
     }
 
