@@ -13,6 +13,10 @@ const getUserProfileCardHTML = (data) => {
                 <div class="wity-channel-description">
                     <span class="channel-description-item">${data.description || ""}</span>
                 </div>
+
+                <div class="wity-channel-summary">
+                    <span class="channel-summary-item">${data.summary || ""}</span>
+                </div>
             </div>
         </div>
     `
