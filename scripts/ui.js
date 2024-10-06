@@ -4,7 +4,7 @@ const WINDOW_PADDING = 20;
 
 const getUserProfileCardDataHTML = (data) => {
     return `
-        <div id="wity-banner-div" style="background-image: url(&quot;${data.banner}&quot;);">
+        <div id="wity-banner-div" style="${data.banner ? `background-image: url(&quot;${data.banner}&quot;)` : `background-color: rgb(${Math.random() * 180}, ${Math.random() * 180}, ${Math.random() * 180})`};">
         </div>
         <div id="wity-profile-content">
              <div id="wity-profile-title">

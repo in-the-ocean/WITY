@@ -1,3 +1,4 @@
+const MAX_TOKEN = 16385;
 /**
  * @typedef {Object} PlaylistItem
  * @property {string} title - The title of the playlist item.
@@ -62,11 +63,11 @@ class AiSummary {
     Your job is to write a short, engaging summary of the Channel, 
     highlighting their content focus, video style, personality, target audience, 
     and recent trends. I want someone who has never watched their channel to get 
-    a clear, interesting impression of the Channel in 3-5 sentences.`;
+    a clear, interesting impression of the Channel in 25 words.`;
 
     const completionResult = await this.llm.completion(
       sysPrompt,
-      stringifiedItems
+      stringifiedItems.slice(0, MAX_TOKEN)
     );
 
     return completionResult.choices[0].message.content;
