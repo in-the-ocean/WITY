@@ -99,7 +99,7 @@ class UserProfileCard {
     }
 
     remove() {
-        // this.el.style.display = "none";
+        this.el.style.display = "none";
     }
 
     countWords(videoTitles, descriptions) {
