@@ -38,11 +38,12 @@ const showProfileIfAvailable = (event) => {
         .then(({videoTitles, videoDescriptions}) => {
             if (videoTitles.length > 0) {
                 console.log(`Total Videos Found: ${videoTitles.length}`);
-                console.log(videoTitles[0]);
-                videoTitles.forEach((title, index) => {
-                    console.log(`${index + 1}. ${title}`);
-                    console.log(`Description: ${videoDescriptions[index]}\n`);
-                });
+                // console.log(videoTitles[0]);
+                // videoTitles.forEach((title, index) => {
+                //     console.log(`${index + 1}. ${title}`);
+                //     console.log(`Description: ${videoDescriptions[index]}\n`);
+                // });
+                userProfileCard.showWordCloud(videoTitles, videoDescriptions);
 
                 new AiSummary(config).getChannelSummary(
                     userProfileCard.data.channelHandle,
@@ -59,8 +60,7 @@ const showProfileIfAvailable = (event) => {
             } else {
                 console.log("No videos found for this channel.");
             }
-        })
-      userProfileCard.show();
+        });
 
       target.addEventListener("mouseout", () => userProfileCard.remove());
     }

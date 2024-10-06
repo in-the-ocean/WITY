@@ -1,20 +1,34 @@
+
 const CURSOR_PADDING = 10;
 const WINDOW_PADDING = 20;
+
+const getUserProfileCardDataHTML = (data) => {
+    return `
+        <div id="wity-banner-div" style="background-image: url(&quot;${data.banner}&quot;);">
+        </div>
+        <div id="wity-profile-content">
+             <div id="wity-profile-title">
+                <img id="wity-profile-image" src="${data.thumbnails}" alt="${data.channelName}" />
+                <h1 id="wity-channel-name">${data.channelName}</h1>
+                <p class="channel-meta-item">${data.channelHandle} • ${data.subscriberCount|| 0} subscribers • ${data.videoCount|| 0} videos</span>
+            </div>
+
+            <div class="wity-channel-description">
+                <p class="channel-description-item">${data.description || ""}</span>
+            </div>
+        </div>
+    `;
+}
 
 const getUserProfileCardHTML = (data) => {
     return `
         <div id="user-profile-card" style="position:absolute;">
-            <div id="wity-banner-div" style="background-image: url(&quot;${data.banner}&quot;);">
+            <div id="wity-profile-card-data">
+                ${getUserProfileCardDataHTML(data)}
             </div>
-            <div id="wity-profile-content">
-                <div id="wity-profile-title">
-                    <img id="wity-profile-image" src="${data.thumbnails}" alt="${data.channelName}" />
-                    <h1 id="wity-channel-name">${data.channelName}</h1>
-                    <p class="channel-meta-item">${data.channelHandle} • ${data.subscriberCount|| 0} subscribers • ${data.videoCount|| 0} videos</span>
-                </div>
-
-                <div class="wity-channel-description">
-                    <p class="channel-description-item">${data.description || ""}</span>
+            <div id="wordcloud-wrapper">
+                <div id="word-cloud-canvas-wrapper"}>
+                    <canvas id="word-cloud-canvas" style="width: 100%; height: 20"></canvas>
                 </div>
             </div>
         </div>
@@ -68,8 +82,9 @@ class UserProfileCard {
     }
 
     updateData(data) {
+        var channel_data = document.getElementById("wity-profile-card-data");
         this.data = data;
-        this.el.innerHTML = getUserProfileCardHTML(this.data);
+        channel_data.innerHTML = getUserProfileCardDataHTML(this.data);
     }
 
     show() {
@@ -79,5 +94,55 @@ class UserProfileCard {
     remove() {
         this.el.style.display = "none";
     }
+
+    countWords(videoTitles, descriptions) {
+        let wordCount = {};
+        videoTitles.forEach(title => {
+            title = title.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
+            title = title.replace(/\d{4}[-./]\d{1,2}([-./]\d{0,2})?(\s\d{2}:\d{2}:\d{2})?/g, '');
+            title = title.replace(/[aA][vV]\d+/g, '');
+            title = title.replace(/[bB][vV]1[1-9a-km-zA-HJ-NP-Z]{9}/g, '');
+            let words = title.split(" ");
+            words.forEach(word => {
+                if (!STOP_WORDS.has(word)) {
+                    if (wordCount[word]) {
+                        wordCount[word]++;
+                    } else {
+                        wordCount[word] = 1;
+                    }
+                }
+            });
+        });
+        // descriptions.forEach(description => {
+        //     description = description.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
+        //     description = description.replace(/\d{4}[-./]\d{1,2}([-./]\d{0,2})?(\s\d{2}:\d{2}:\d{2})?/g, '');
+        //     description = description.replace(/[aA][vV]\d+/g, '');
+        //     description = description.replace(/[bB][vV]1[1-9a-km-zA-HJ-NP-Z]{9}/g, '');
+        //     let words = description.split(" ");
+        //     words.forEach(word => {
+        //         if (!STOP_WORDS.has(word)) {
+        //             if (wordCount[word]) {
+        //                 wordCount[word]++;
+        //             } else {
+        //                 wordCount[word] = 1;
+        //             }
+        //         }
+        //     });
+        // });
+        return wordCount;
+    }
+
+    showWordCloud(videoTitles, description) {
+        let canvas = document.getElementById("word-cloud-canvas");
+        canvas.style.height = `${canvas.offsetWidth / 2}px`;
+        canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+        canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+        console.log("Canvas", canvas.width, canvas.height);
+
+        let wordCount = this.countWords(videoTitles, description);
+        WordCloud(canvas, { list: Object.entries(wordCount).map(([text, weight]) => ({text, weight})) });
+
+    }
+
 
 }
