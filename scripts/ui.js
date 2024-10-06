@@ -61,10 +61,13 @@ class UserProfileCard {
 
     setCursor(x, y) {
         this.cursor = {x: x, y: y};
+        console.log("cursor", this.cursor);
 
         if (this.el) {
             let width = this.el.scrollWidth;
             let height = this.el.scrollHeight;
+
+            console.log("dimensoin", width, height, window.scrollX, window.scrollY);
     
             if (this.cursor.x + width + WINDOW_PADDING > window.scrollX + window.innerWidth) {
                 // Will overflow to the right, put it on the left
@@ -96,6 +99,7 @@ class UserProfileCard {
 
     show() {
         this.el.style.display = "flex";
+        this.setCursor(this.cursor.x, this.cursor.y);
     }
 
     remove() {
@@ -110,7 +114,6 @@ class UserProfileCard {
             title = title.replace(/[aA][vV]\d+/g, '');
             title = title.replace(/[bB][vV]1[1-9a-km-zA-HJ-NP-Z]{9}/g, '');
             let words = title.split(" ");
-            console.log(words);
             words.forEach(word => {
                 if (!STOP_WORDS.has(word.toLowerCase())) {
                     if (wordCount[word]) {
