@@ -84,7 +84,7 @@ class UserProfileCard {
 
 function niceNum(num) {
     if (typeof num !== 'number'){
-        num = formatNumber(num);
+        num = Number(num);
     }
     let formattedNumber;
     let suffix = ' ';
