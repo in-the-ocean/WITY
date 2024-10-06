@@ -98,13 +98,14 @@ class UserProfileCard {
     countWords(videoTitles, descriptions) {
         let wordCount = {};
         videoTitles.forEach(title => {
-            title = title.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
+            // title = title.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
             title = title.replace(/\d{4}[-./]\d{1,2}([-./]\d{0,2})?(\s\d{2}:\d{2}:\d{2})?/g, '');
             title = title.replace(/[aA][vV]\d+/g, '');
             title = title.replace(/[bB][vV]1[1-9a-km-zA-HJ-NP-Z]{9}/g, '');
             let words = title.split(" ");
+            console.log(words);
             words.forEach(word => {
-                if (!STOP_WORDS.has(word)) {
+                if (!STOP_WORDS.has(word.toLowerCase())) {
                     if (wordCount[word]) {
                         wordCount[word]++;
                     } else {
@@ -120,7 +121,7 @@ class UserProfileCard {
         //     description = description.replace(/[bB][vV]1[1-9a-km-zA-HJ-NP-Z]{9}/g, '');
         //     let words = description.split(" ");
         //     words.forEach(word => {
-        //         if (!STOP_WORDS.has(word)) {
+        //         if (!STOP_WORDS.has(word.toLowerCase())) {
         //             if (wordCount[word]) {
         //                 wordCount[word]++;
         //             } else {
