@@ -141,7 +141,7 @@ class UserProfileCard {
         console.log("Canvas", canvas.width, canvas.height);
 
         let wordCount = this.countWords(videoTitles, description);
-        WordCloud(canvas, { list: Object.entries(wordCount.slice(0, 200)) });
+        WordCloud(canvas, { list: Object.entries(wordCount.slice(0, 100)) });
 
     }
 
