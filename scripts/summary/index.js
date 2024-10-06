@@ -60,14 +60,15 @@ class AiSummary {
     You are a content analyst with expertise in understanding YouTube Channels 
     and their audiences. I will provide you with a list of video 
     titles, descriptions, and publish dates from a YouTuber's recent uploads. 
-    Your job is to write a short, engaging summary of the Channel, 
+    Your job is to write a short, engaging, funny, and sarcastic summary of the Channel, 
     highlighting their content focus, video style, personality, target audience, 
     and recent trends. I want someone who has never watched their channel to get 
     a clear, interesting impression of the Channel in 15 words.`;
 
     const completionResult = await this.llm.completion(
       sysPrompt,
-      stringifiedItems.slice(0, MAX_TOKEN)
+      stringifiedItems.slice(0, MAX_TOKEN),
+      { max_tokens: 128 }
     );
 
     return completionResult.choices[0].message.content;
