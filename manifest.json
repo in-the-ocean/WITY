@@ -13,6 +13,8 @@
             "scripts/ui.js",
             "scripts/globals.js",
             "scripts/wordcloud2.js",
+            "scripts/stopwords.js",
+            "scripts/api.ts",
             "scripts/summary/index.js",
             
             "libs/cache/upstash.js",
