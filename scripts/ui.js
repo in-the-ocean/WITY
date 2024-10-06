@@ -146,3 +146,30 @@ class UserProfileCard {
 
 
 }
+
+function niceNum(num) {
+    if (typeof num !== 'number'){
+        num = Number(num);
+    }
+    let formattedNumber;
+    let suffix = ' ';
+    if (num < 1000){
+        formattedNumber = num;
+    }
+    else if (num >= 1000 && num < 1000000){
+        formattedNumber = num/1000;
+        suffix = 'K';
+    }
+    else if (num >= 1000000 && num < 1000000000){
+        formattedNumber = num/1000000;
+        suffix = 'M';
+    }
+    else if (num >= 1000000000){
+        formattedNumber = num/1000000000;
+        suffix = 'B';
+    }
+    else{
+        formattedNumber = (-1)*num
+    }
+    return `${formattedNumber}${suffix}`;
+}
