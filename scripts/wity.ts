@@ -26,11 +26,12 @@ const showProfileIfAvailable = (event) => {
                 console.log("banner:", result.banner);
             }
         });
-        getAllVideoTitlesByChannelHandle(channelHandle).then(videoTitles => {
+        getAllVideoTitlesByChannelHandle(channelHandle).then(({videoTitles, videoDescriptions}) => {
             if (videoTitles.length > 0) {
                 console.log(`Total Videos Found: ${videoTitles.length}`);
                 videoTitles.forEach((title, index) => {
                     console.log(`${index + 1}. ${title}`);
+                    console.log(`Description: ${videoDescriptions[index]}\n`);
                 });
             } else {
                 console.log("No videos found for this channel.");

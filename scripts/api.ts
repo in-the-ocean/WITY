@@ -21,7 +21,7 @@ const getChannelNSubscriberName = (channelHandle) => {
 };
 
 const getUploadsPlaylistIdByHandle = (channelHandle) => {
-    return fetch(`${GOOGLE_API}/youtube/v3/channels?part=contentDetails&forHandle=${encodeURIComponent(channelHandle)}&key=${API_KEY}`)
+    return fetch(`${GOOGLE_API}/youtube/v3/channels?part=contentDetails,snippet&forHandle=${encodeURIComponent(channelHandle)}&key=${API_KEY}`)
         .then(response => response.json())
         .then(data => {
             if (data.items && data.items.length > 0) {
@@ -56,13 +56,18 @@ const getVideoTitles = (playlistItems) => {
     return playlistItems.map(item => item.snippet.title);
 };
 
+const getVideoDescription = (playlistItems) => {
+    return playlistItems.map(item => item.snippet.description);
+};
+
 // Main function to get all video titles using the channel handle
 const getAllVideoTitlesByChannelHandle = async (channelHandle) => {
     const uploadsPlaylistId = await getUploadsPlaylistIdByHandle(channelHandle);
     if (uploadsPlaylistId) {
         const playlistItems = await getAllPlaylistItems(uploadsPlaylistId);
         const videoTitles = getVideoTitles(playlistItems);
-        return videoTitles;
+        const videoDescriptions = getVideoDescription(playlistItems);
+        return {videoTitles, videoDescriptions};
     } else {
         return [];
     }
