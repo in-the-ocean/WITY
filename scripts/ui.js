@@ -30,6 +30,10 @@ const getUserProfileCardHTML = (data) => {
                 <div id="word-cloud-canvas-wrapper"}>
                     <canvas id="word-cloud-canvas" style="width: 100%; height: 20"></canvas>
                 </div>
+
+                <div class="wity-channel-summary">
+                    <span class="channel-summary-item">${data.summary || ""}</span>
+                </div>
             </div>
         </div>
     `
