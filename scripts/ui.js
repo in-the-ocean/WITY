@@ -14,7 +14,7 @@ const getUserProfileCardDataHTML = (data) => {
             </div>
 
             <div class="wity-channel-description">
-                <p class="channel-description-item">${data.description || ""}</span>
+                <p class="channel-description-item">${data.summary || data.description || ""}</span>
             </div>
         </div>
     `;
@@ -28,11 +28,7 @@ const getUserProfileCardHTML = (data) => {
             </div>
             <div id="wordcloud-wrapper">
                 <div id="word-cloud-canvas-wrapper"}>
-                    <canvas id="word-cloud-canvas" style="width: 100%; height: 20"></canvas>
-                </div>
-
-                <div class="wity-channel-summary">
-                    <span class="channel-summary-item">${data.summary || ""}</span>
+                    <canvas id="word-cloud-canvas" style="width: 100%"></canvas>
                 </div>
             </div>
         </div>

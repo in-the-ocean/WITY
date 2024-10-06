@@ -62,12 +62,12 @@ class AiSummary {
     Your job is to write a short, engaging, funny/sarcastic summary of the Channel, 
     highlighting their content focus, video style, personality, target audience, 
     or recent trends. I want someone who has never watched their channel to get 
-    a clear, interesting impression of the Channel in 3 short sentences.`;
+    a clear, interesting impression of the Channel in 2 short sentences.`;
 
         const completionResult = await this.llm.completion(
             sysPrompt,
             stringifiedItems,
-            { max_tokens: 256 }
+            { max_tokens: 128 }
         );
 
         return completionResult.choices[0].message.content;
