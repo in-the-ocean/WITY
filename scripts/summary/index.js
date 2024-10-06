@@ -63,7 +63,7 @@ class AiSummary {
     Your job is to write a short, engaging summary of the Channel, 
     highlighting their content focus, video style, personality, target audience, 
     and recent trends. I want someone who has never watched their channel to get 
-    a clear, interesting impression of the Channel in 25 words.`;
+    a clear, interesting impression of the Channel in 15 words.`;
 
     const completionResult = await this.llm.completion(
       sysPrompt,

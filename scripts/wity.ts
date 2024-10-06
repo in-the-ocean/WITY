@@ -1,6 +1,7 @@
 const YOUTUBE_URL = "https://www.youtube.com";
 const GOOGLE_API = "https://www.googleapis.com";
-const API_KEY = "AIzaSyAzvFjqNMyEA9Giukpjb3eNxO7i3h0CIMk"
+const API_KEY = "AIzaSyAzvFjqNMyEA9Giukpjb3eNxO7i3h0CIMk";
+
 /**
  * @typedef {Object} ChannelData
  * @property {string} channelName
@@ -37,11 +38,6 @@ const showProfileIfAvailable = (event) => {
         .then(({videoTitles, videoDescriptions}) => {
             if (videoTitles.length > 0) {
                 console.log(`Total Videos Found: ${videoTitles.length}`);
-                // console.log(videoTitles[0]);
-                // videoTitles.forEach((title, index) => {
-                //     console.log(`${index + 1}. ${title}`);
-                //     console.log(`Description: ${videoDescriptions[index]}\n`);
-                // });
                 userProfileCard.showWordCloud(videoTitles, videoDescriptions);
 
                 new AiSummary(config).getChannelSummary(

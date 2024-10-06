@@ -9,13 +9,19 @@ const getUserProfileCardDataHTML = (data) => {
         <div id="wity-profile-content">
              <div id="wity-profile-title">
                 <img id="wity-profile-image" src="${data.thumbnails}" alt="${data.channelName}" />
-                <h1 id="wity-channel-name">${data.channelName}</h1>
-                <p class="channel-meta-item">${data.channelHandle} • ${data.subscriberCount|| 0} subscribers • ${data.videoCount|| 0} videos</span>
+                <div id="wity-channel-meta">
+                    <h1 id="wity-channel-name">${data.channelName}</h1>
+                    <p class="channel-meta-item">${data.channelHandle} • ${niceNum(data.subscriberCount|| 0)} subscribers • ${data.videoCount|| 0} videos</p>
+                    <p class="channel-description-item">${data.description || ""}</p>
+                </div>
             </div>
 
-            <div class="wity-channel-description">
-                <p class="channel-description-item">${data.description || ""}</span>
-            </div>
+            ${data.summary ? 
+                `<div class="wity-channel-meta">
+                    <p id="wity-ai-summary">${data.summary}</p>
+                </div>`
+                : ""}
+
         </div>
     `;
 }
@@ -82,6 +88,7 @@ class UserProfileCard {
     }
 
     updateData(data) {
+        console.log("updating data", data.summary)
         var channel_data = document.getElementById("wity-profile-card-data");
         this.data = data;
         channel_data.innerHTML = getUserProfileCardDataHTML(this.data);
@@ -92,7 +99,7 @@ class UserProfileCard {
     }
 
     remove() {
-        this.el.style.display = "none";
+        // this.el.style.display = "none";
     }
 
     countWords(videoTitles, descriptions) {
