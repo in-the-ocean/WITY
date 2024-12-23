@@ -1,30 +1,53 @@
-
 const CURSOR_PADDING = 10;
 const WINDOW_PADDING = 20;
 
+const getSignInPageHTML = () => {
+    return `
+        <div id="wity-sign-in-page">
+            <button id="wity-sign-in-button" type="button">Sign in with Google</button>
+        </div>
+    `;
+};
+
 const getUserProfileCardDataHTML = (data) => {
     return `
-        <div id="wity-banner-div" style="${data.banner ? `background-image: url(&quot;${data.banner}&quot;)` : `background-color: rgb(${Math.random() * 180}, ${Math.random() * 180}, ${Math.random() * 180})`};">
+        <div id="wity-banner-div" style="${
+            data.banner
+                ? `background-image: url(&quot;${data.banner}&quot;)`
+                : `background-color: rgb(${Math.random() * 180}, ${
+                      Math.random() * 180
+                  }, ${Math.random() * 180})`
+        };">
         </div>
         <div id="wity-profile-content">
              <div id="wity-profile-title">
-                <img id="wity-profile-image" src="${data.thumbnails}" alt="${data.channelName}" />
+                <img id="wity-profile-image" src="${data.thumbnails}" alt="${
+        data.channelName
+    }" />
                 <div id="wity-channel-meta">
                     <h1 id="wity-channel-name">${data.channelName}</h1>
-                    <p class="channel-meta-item">${data.channelHandle} • ${niceNum(data.subscriberCount|| 0)} subscribers • ${data.videoCount|| 0} videos</p>
-                    <p class="channel-description-item">${data.description || ""}</p>
+                    <p class="channel-meta-item">${
+                        data.channelHandle
+                    } • ${niceNum(data.subscriberCount || 0)} subscribers • ${
+        data.videoCount || 0
+    } videos</p>
+                    <p class="channel-description-item">${
+                        data.description || ""
+                    }</p>
                 </div>
             </div>
 
-            ${data.summary ? 
-                `<div class="wity-channel-meta">
+            ${
+                data.summary
+                    ? `<div class="wity-channel-meta">
                     <p id="wity-ai-summary">${data.summary}</p>
                 </div>`
-                : ""}
+                    : ""
+            }
 
         </div>
     `;
-}
+};
 
 const getUserProfileCardHTML = (data) => {
     return `
@@ -38,63 +61,97 @@ const getUserProfileCardHTML = (data) => {
                 </div>
             </div>
         </div>
-    `
-}
+    `;
+};
 
 class UserProfileCard {
     data;
     el;
     cursor;
     constructor() {
-        this.data = {
-        };
+        this.data = {};
         this.el = document.createElement("div");
         this.el.style.position = "absolute";
         this.el.style.display = "none";
         this.el.style.backgroundColor = "red";
         this.el.innerHTML = getUserProfileCardHTML(this.data);
-        this.el.style.zIndex = 1600;
-        this.cursor = {x: 0, y: 0};
+        this.el.style.zIndex = 10000;
+        this.cursor = { x: 0, y: 0 };
+
+        this.el.addEventListener("mouseenter", () => {
+            clearTimeout(this.remove.timer);
+        });
+
+        this.el.addEventListener("mouseleave", () => {
+            this.remove();
+        });
 
         document.body.appendChild(this.el);
     }
 
     setCursor(x, y) {
-        this.cursor = {x: x, y: y};
-        console.log("cursor", this.cursor);
+        this.cursor = { x: x, y: y };
 
         if (this.el) {
             let width = this.el.scrollWidth;
             let height = this.el.scrollHeight;
 
-            console.log("dimensoin", width, height, window.scrollX, window.scrollY);
-    
-            if (this.cursor.x + width + WINDOW_PADDING > window.scrollX + window.innerWidth) {
+            if (
+                this.cursor.x + width + WINDOW_PADDING >
+                window.scrollX + window.innerWidth
+            ) {
                 // Will overflow to the right, put it on the left
-                this.el.style.left = `${this.cursor.x - CURSOR_PADDING - width}px`;
+                this.el.style.left = `${
+                    this.cursor.x - CURSOR_PADDING - width
+                }px`;
             } else {
-                this.el.style.left = `${this.cursor.x+ CURSOR_PADDING}px`;
+                this.el.style.left = `${this.cursor.x + CURSOR_PADDING}px`;
             }
-    
-            if (this.cursor.y+ height + WINDOW_PADDING > window.scrollY + window.innerHeight) {
+
+            if (
+                this.cursor.y + height + WINDOW_PADDING >
+                window.scrollY + window.innerHeight
+            ) {
                 // Will overflow to the bottom, put it on the top
-                if (this.cursor.y- WINDOW_PADDING - height < window.scrollY) {
+                if (this.cursor.y - WINDOW_PADDING - height < window.scrollY) {
                     // Can't fit on top either, put it in the middle
-                    this.el.style.top = `${window.scrollY + (window.innerHeight - height) / 2}px`;
+                    this.el.style.top = `${
+                        window.scrollY + (window.innerHeight - height) / 2
+                    }px`;
                 } else {
-                    this.el.style.top = `${this.cursor.y - CURSOR_PADDING - height}px`;
+                    this.el.style.top = `${
+                        this.cursor.y - CURSOR_PADDING - height
+                    }px`;
                 }
             } else {
-                this.el.style.top = `${this.cursor.y+ CURSOR_PADDING}px`;
+                this.el.style.top = `${this.cursor.y + CURSOR_PADDING}px`;
             }
         }
     }
 
+    showSignInPage() {
+        console.log("showing sign in page");
+        var channel_data = document.getElementById("wity-profile-card-data");
+        channel_data.innerHTML = getSignInPageHTML();
+        let button = document.getElementById("wity-sign-in-button");
+        button.onclick = () => {
+            chrome.runtime.sendMessage(
+                { type: "GET_ACCESS_TOKEN", interactive: true },
+                (response) => {
+                    console.log("new token", response);
+                }
+            );
+            this.remove();
+        };
+        this.show();
+    }
+
     updateData(data) {
-        console.log("updating data", data.summary)
+        console.log("updating data", data.summary);
         var channel_data = document.getElementById("wity-profile-card-data");
         this.data = data;
         channel_data.innerHTML = getUserProfileCardDataHTML(this.data);
+        this.setCursor(this.cursor.x, this.cursor.y);
     }
 
     show() {
@@ -103,18 +160,28 @@ class UserProfileCard {
     }
 
     remove() {
-        this.el.style.display = "none";
+        clearTimeout(this.remove.timer);
+        this.remove.timer = setTimeout(() => {
+            this.data = {};
+            this.el.style.display = "none";
+            let canvas = document.getElementById("word-cloud-canvas");
+            canvas.style.height = "0px";
+            canvas.height = 0;
+        }, 500);
     }
 
     countWords(videoTitles, descriptions) {
         let wordCount = {};
-        videoTitles.forEach(title => {
+        videoTitles.forEach((title) => {
             // title = title.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
-            title = title.replace(/\d{4}[-./]\d{1,2}([-./]\d{0,2})?(\s\d{2}:\d{2}:\d{2})?/g, '');
-            title = title.replace(/[aA][vV]\d+/g, '');
-            title = title.replace(/[bB][vV]1[1-9a-km-zA-HJ-NP-Z]{9}/g, '');
+            title = title.replace(
+                /\d{4}[-./]\d{1,2}([-./]\d{0,2})?(\s\d{2}:\d{2}:\d{2})?/g,
+                ""
+            );
+            title = title.replace(/[aA][vV]\d+/g, "");
+            title = title.replace(/[bB][vV]1[1-9a-km-zA-HJ-NP-Z]{9}/g, "");
             let words = title.split(" ");
-            words.forEach(word => {
+            words.forEach((word) => {
                 if (!STOP_WORDS.has(word.toLowerCase())) {
                     if (wordCount[word]) {
                         wordCount[word]++;
@@ -154,38 +221,34 @@ class UserProfileCard {
         const entriesArray = Object.entries(wordCount);
         entriesArray.sort((a, b) => b[1] - a[1]);
         const wordCountArray = entriesArray.slice(0, 100);
-        WordCloud(canvas, { list: wordCountArray, 
-                            weightFactor: 100 / wordCountArray[0][1] * window.devicePixelRatio
-                        });
-
+        WordCloud(canvas, {
+            list: wordCountArray,
+            weightFactor:
+                (100 / wordCountArray[0][1]) * window.devicePixelRatio,
+        });
+        this.setCursor(this.cursor.x, this.cursor.y);
     }
-
-
 }
 
 function niceNum(num) {
-    if (typeof num !== 'number'){
+    if (typeof num !== "number") {
         num = Number(num);
     }
     let formattedNumber;
-    let suffix = ' ';
-    if (num < 1000){
+    let suffix = " ";
+    if (num < 1000) {
         formattedNumber = num;
-    }
-    else if (num >= 1000 && num < 1000000){
-        formattedNumber = num/1000;
-        suffix = 'K';
-    }
-    else if (num >= 1000000 && num < 1000000000){
-        formattedNumber = num/1000000;
-        suffix = 'M';
-    }
-    else if (num >= 1000000000){
-        formattedNumber = num/1000000000;
-        suffix = 'B';
-    }
-    else{
-        formattedNumber = (-1)*num
+    } else if (num >= 1000 && num < 1000000) {
+        formattedNumber = num / 1000;
+        suffix = "K";
+    } else if (num >= 1000000 && num < 1000000000) {
+        formattedNumber = num / 1000000;
+        suffix = "M";
+    } else if (num >= 1000000000) {
+        formattedNumber = num / 1000000000;
+        suffix = "B";
+    } else {
+        formattedNumber = -1 * num;
     }
     return `${formattedNumber}${suffix}`;
 }
