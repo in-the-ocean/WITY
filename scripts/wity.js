@@ -30,14 +30,28 @@ const showProfileIfAvailable = (channelHandle, event) => {
             if (response && response.success) {
                 token = response.token;
 
-                getChannelNSubscriberName(channelHandle, token).then(
-                    (result) => {
+                getChannelNSubscriberName(channelHandle, token)
+                    .then((result) => {
                         if (result) {
                             userProfileCard.updateData(result);
                             userProfileCard.show();
                         }
-                    }
-                );
+                        return result;
+                    })
+                    .then((result) => {
+                        if (result?.channelId) {
+                            getSubscriptionStatus(result.channelId, token).then(
+                                (subscribed) => {
+                                    console.log("subscribed", subscribed);
+                                    userProfileCard.data.subscribed =
+                                        subscribed;
+                                    userProfileCard.showSubscribedButton(
+                                        subscribed
+                                    );
+                                }
+                            );
+                        }
+                    });
 
                 getAllVideoTitlesByChannelHandle(channelHandle, token).then(
                     ({ videoTitles, videoDescriptions }) => {

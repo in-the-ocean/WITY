@@ -9,6 +9,16 @@ const getSignInPageHTML = () => {
     `;
 };
 
+const getSubscribeButtonHTML = (subscribed) => {
+    return `
+        <button id="wity-subscribe-button" type="button" style="background-color: ${
+            subscribed ? "#606060" : "#FF0000"
+        }">
+            ${subscribed ? "Subscribed" : "Subscribe"}
+        </button>
+    `;
+};
+
 const getUserProfileCardDataHTML = (data) => {
     return `
         <div id="wity-banner-div" style="${
@@ -20,7 +30,7 @@ const getUserProfileCardDataHTML = (data) => {
         };">
         </div>
         <div id="wity-profile-content">
-             <div id="wity-profile-title">
+            <div id="wity-profile-title">
                 <img id="wity-profile-image" src="${data.thumbnails}" alt="${
         data.channelName
     }" />
@@ -34,17 +44,15 @@ const getUserProfileCardDataHTML = (data) => {
                     <p class="channel-description-item">${
                         data.description || ""
                     }</p>
+                    <div id="wity-subscribe-button">
+                        ${
+                            data.subscribed !== undefined
+                                ? getSubscribeButtonHTML(data.subscribed)
+                                : ""
+                        }
+                    </div>
                 </div>
             </div>
-
-            ${
-                data.summary
-                    ? `<div class="wity-channel-meta">
-                    <p id="wity-ai-summary">${data.summary}</p>
-                </div>`
-                    : ""
-            }
-
         </div>
     `;
 };
@@ -157,6 +165,11 @@ class UserProfileCard {
     show() {
         this.el.style.display = "flex";
         this.setCursor(this.cursor.x, this.cursor.y);
+    }
+
+    showSubscribedButton(subscribed) {
+        let subscribeButton = document.getElementById("wity-subscribe-button");
+        subscribeButton.innerHTML = getSubscribeButtonHTML(subscribed);
     }
 
     remove() {

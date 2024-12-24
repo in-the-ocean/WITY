@@ -4,9 +4,6 @@ const notifyInvaidToken = () => {
 
 const getChannelNSubscriberName = (channelHandle, token) => {
     return fetch(
-        // `${GOOGLE_API}/youtube/v3/channels?part=snippet,statistics,brandingSettings&forHandle=${encodeURIComponent(
-        //   channelHandle
-        // )}&key=${config.YOUTUBE_API_KEY}`
         `${GOOGLE_API}/youtube/v3/channels?part=snippet,statistics,brandingSettings&forHandle=${encodeURIComponent(
             channelHandle
         )}`,
@@ -26,6 +23,7 @@ const getChannelNSubscriberName = (channelHandle, token) => {
         .then((data) => {
             if (data.items && data.items.length > 0) {
                 const channelName = data.items[0].snippet.title;
+                const channelId = data.items[0].id;
                 const description = data.items[0].snippet?.description;
                 const subscriberCount =
                     data.items[0].statistics.subscriberCount;
@@ -36,6 +34,7 @@ const getChannelNSubscriberName = (channelHandle, token) => {
                     data.items[0].brandingSettings?.image?.bannerExternalUrl;
                 return {
                     channelHandle,
+                    channelId,
                     channelName,
                     description,
                     subscriberCount,
@@ -55,11 +54,58 @@ const getChannelNSubscriberName = (channelHandle, token) => {
         });
 };
 
+const subscribeTo = async (channelId, token) => {
+    return fetch(`${GOOGLE_API}/youtube/v3/subscriptions?part=snippet`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+            snippet: {
+                resourceId: {
+                    kind: "youtube#channel",
+                    channelId: channelId,
+                },
+            },
+        }),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                notifyInvaidToken();
+                throw new Error("Invalid token");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log("Subscription status:", data);
+            return data;
+        });
+};
+
+const getSubscriptionStatus = async (channelId, token) => {
+    return fetch(
+        `${GOOGLE_API}/youtube/v3/subscriptions?ipart=snippet%2CcontentDetails&forChannelId=${channelId}&mine=true`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    )
+        .then((response) => {
+            if (!response.ok) {
+                notifyInvaidToken();
+                throw new Error("Invalid token");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log("Subscription status:", data);
+            return data.items.length > 0;
+        });
+};
+
 const getUploadsPlaylistIdByHandle = (channelHandle, token) => {
     return fetch(
-        // `${GOOGLE_API}/youtube/v3/channels?part=contentDetails,snippet&forHandle=${encodeURIComponent(
-        //   channelHandle
-        // )}&key=${config.YOUTUBE_API_KEY}`
         `${GOOGLE_API}/youtube/v3/channels?part=contentDetails,snippet&forHandle=${encodeURIComponent(
             channelHandle
         )}`,
