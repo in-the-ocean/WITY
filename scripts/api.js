@@ -82,6 +82,23 @@ const subscribeTo = async (channelId, token) => {
         });
 };
 
+const unsubscribeFrom = async (subscriptionId, token) => {
+    return fetch(`${GOOGLE_API}/youtube/v3/subscriptions?id=${subscriptionId}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json"
+        },
+    })
+        .then((response) => {
+            if (!response.ok || response.status !== 204) {
+                console.log("Error unsubscribing:");
+                notifyInvaidToken();
+                throw new Error("Invalid token");
+            }
+        })
+}
+
 const getSubscriptionStatus = async (channelId, token) => {
     return fetch(
         `${GOOGLE_API}/youtube/v3/subscriptions?ipart=snippet%2CcontentDetails&forChannelId=${channelId}&mine=true`,
@@ -98,10 +115,6 @@ const getSubscriptionStatus = async (channelId, token) => {
             }
             return response.json();
         })
-        .then((data) => {
-            console.log("Subscription status:", data);
-            return data.items.length > 0;
-        });
 };
 
 const getUploadsPlaylistIdByHandle = (channelHandle, token) => {

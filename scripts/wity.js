@@ -41,12 +41,18 @@ const showProfileIfAvailable = (channelHandle, event) => {
                     .then((result) => {
                         if (result?.channelId) {
                             getSubscriptionStatus(result.channelId, token).then(
-                                (subscribed) => {
-                                    console.log("subscribed", subscribed);
-                                    userProfileCard.data.subscribed =
-                                        subscribed;
+                                (subscription) => {
+                                    console.log("subscription", subscription)
+                                    if (subscription.items.length > 0) {
+                                        console.log("subscribed");
+                                        userProfileCard.data.subscribed = true;
+                                        userProfileCard.data.subscriptionId = subscription.items[0].id;
+                                    } else {
+                                        console.log("not subscribed");
+                                        userProfileCard.data.subscribed = false;
+                                    }
                                     userProfileCard.showSubscribedButton(
-                                        subscribed
+                                        userProfileCard.data.subscribed
                                     );
                                 }
                             );

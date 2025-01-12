@@ -1,19 +1,24 @@
 const CURSOR_PADDING = 10;
 const WINDOW_PADDING = 20;
 
+
+const getProfInfoString = (handle, subs, videos) => {
+    return `<strong>${handle}</strong>&nbsp• ${niceNum(subs)}&nbspsubscribers&nbsp•&nbsp${videos}&nbspvideos`;
+}
+
 const getSignInPageHTML = () => {
     return `
         <div id="wity-sign-in-page">
-            <button id="wity-sign-in-button" type="button">Sign in with Google</button>
+            <h1 id="wity-sign-in-title">Sign in to YouTube to use WITY</h1>
+            <p id="wity-sign-in-description">WITY needs your authorization to access and manage data on your YouTube account.</p>
+            <button id="wity-sign-in-button" type="button">Sign in</button>
         </div>
     `;
 };
 
 const getSubscribeButtonHTML = (subscribed) => {
     return `
-        <button id="wity-subscribe-button" type="button" style="background-color: ${
-            subscribed ? "#606060" : "#FF0000"
-        }">
+        <button id="wity-subscribe-button" class="wity-subscribe-button-${subscribed ? "subscribed": "unsubscribed"}" type="button">
             ${subscribed ? "Subscribed" : "Subscribe"}
         </button>
     `;
@@ -32,19 +37,17 @@ const getUserProfileCardDataHTML = (data) => {
         <div id="wity-profile-content">
             <div id="wity-profile-title">
                 <img id="wity-profile-image" src="${data.thumbnails}" alt="${
-        data.channelName
-    }" />
+                    data.channelName
+                }" />
                 <div id="wity-channel-meta">
                     <h1 id="wity-channel-name">${data.channelName}</h1>
                     <p class="channel-meta-item">${
-                        data.channelHandle
-                    } • ${niceNum(data.subscriberCount || 0)} subscribers • ${
-        data.videoCount || 0
-    } videos</p>
+                        getProfInfoString(data.channelHandle, data.subscriberCount, data.videoCount).toString() || ""}
+                    </p>
                     <p class="channel-description-item">${
                         data.description || ""
                     }</p>
-                    <div id="wity-subscribe-button">
+                    <div id="wity-subscribe">
                         ${
                             data.subscribed !== undefined
                                 ? getSubscribeButtonHTML(data.subscribed)
@@ -64,8 +67,8 @@ const getUserProfileCardHTML = (data) => {
                 ${getUserProfileCardDataHTML(data)}
             </div>
             <div id="wordcloud-wrapper">
-                <div id="word-cloud-canvas-wrapper"}>
-                    <canvas id="word-cloud-canvas" style="width: 100%; height: 20"></canvas>
+                <div id="word-cloud-canvas-wrapper">
+                    <canvas id="word-cloud-canvas" style="width: 100%; height: 0px" height=0></canvas>
                 </div>
             </div>
         </div>
@@ -151,6 +154,7 @@ class UserProfileCard {
             );
             this.remove();
         };
+        this.setCursor(this.cursor.x, this.cursor.y);
         this.show();
     }
 
@@ -168,8 +172,44 @@ class UserProfileCard {
     }
 
     showSubscribedButton(subscribed) {
-        let subscribeButton = document.getElementById("wity-subscribe-button");
+        let subscribeButton = document.getElementById("wity-subscribe");
         subscribeButton.innerHTML = getSubscribeButtonHTML(subscribed);
+
+        let button = document.getElementById("wity-subscribe-button");
+        button.onclick = () => {
+            button.disabled = true;
+
+            chrome.runtime.sendMessage(
+                {
+                    type: "GET_ACCESS_TOKEN",
+                    interactive: false,
+                },
+                (response) => {
+                    if (response && response.success) {
+                        let token = response.token;
+                        if (this.data.subscribed) {
+                            // unsubscribe
+                            unsubscribeFrom(this.data.subscriptionId, token).then(
+                                () => {
+                                    console.log("unsubscribed");
+                                    this.data.subscribed = false;
+                                    this.showSubscribedButton(false);
+                                }
+                            );
+                        } else {
+                            // subscribe
+                            subscribeTo(this.data.channelId, token).then(
+                                (result) => {
+                                    console.log("subscribed", result);
+                                    this.data.subscribed = true;
+                                    this.data.subscriptionId = result.id;
+                                    this.showSubscribedButton(true);
+                                }
+                            );
+                        }
+                    }
+                });
+        }
     }
 
     remove() {
@@ -226,6 +266,7 @@ class UserProfileCard {
     showWordCloud(videoTitles, description) {
         let canvas = document.getElementById("word-cloud-canvas");
         canvas.style.height = `${canvas.offsetWidth / 2}px`;
+        canvas.style.fontSize = "12px";
         canvas.width = canvas.offsetWidth * window.devicePixelRatio;
         canvas.height = canvas.offsetHeight * window.devicePixelRatio;
         console.log("Canvas", canvas.width, canvas.height);
