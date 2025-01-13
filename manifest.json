@@ -2,7 +2,10 @@
     "manifest_version": 3,
     "name": "WITY (Who Is This Youtuber)",
     "version": "0.0.1",
-    "description": "Descriptive pop up for a youtube channel",
+    "description": "Hover your mouse over a channel name to see a descriptive pop up for a youtube channel!",
+    "icons": {
+        "128": "images/icon.png"
+    },
     "permissions": ["identity"],
     "oauth2": {
         "client_id": "946558197945-a2b4ineg0h1l7v46hpbqogvlm4oq808o.apps.googleusercontent.com",
