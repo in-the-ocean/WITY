@@ -1,9 +1,9 @@
-# WITY (Who Is This Youtuber)
+# WITY (Who Is This YouTuber)
 
-## Get Started
+WITY is a Chrome extension built for YouTube. It generates detailed information about a YouTube Channel when you hover your mouse over the channel name. 
 
-1. Download the repo to your local machine.
-2. Update `config/index.js` with you own API keys.
-3. In Chrome Extension, turn on `Developer Mode`.
-4. Click `Load Unpacked`, select the root directory of this project.
-5. Enjoy YouTube~
+![screenshot](images/screenshots.png)
+
+## Privacy Policy
+
+[View the privacy policy here](https://in-the-ocean.github.io/privacy-policy-wity/privacy-policy.html)
